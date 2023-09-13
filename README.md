@@ -1,1 +1,2 @@
 # Ridge-Fuzzy-Regression-Models
+These consists two parts of my coding attempts with R Studio while working on a Thesis proposal for a Doctorate programme in Statistics Research while applying to King's College London as at Q4 2021. Basically, two algorithms on Fuzzy Ridge Regression Models following the approach adopted by Choi et al (2019) and Kim et al (2020) respectively. The proposed algorithms excludes Monte Carlo data simulation
