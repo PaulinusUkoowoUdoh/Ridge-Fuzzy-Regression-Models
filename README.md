@@ -1,0 +1,1 @@
+# Ridge-Fuzzy-Regression-Models
