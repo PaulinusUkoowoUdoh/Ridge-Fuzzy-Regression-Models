@@ -1,0 +1,118 @@
+N = 15; 
+k = 3; 
+p = k + 1
+
+for i in 1:N, for j in 1:p
+
+#symmetric case
+left_spread_y[i] = right_spread_y[i]  
+left_y[i] <- center_y[i] - left_spread_y[i]
+right_y[i] <- center_y[i] + right_spread_y[i]
+left_spread_x[i,j] = right_spread_x[i,j]
+left_x[i,j] <- center_x[i,j] - left_spread_x[i,j]
+right_x[i,j] <- center_x[i,j] + right_spread_x[i,j]
+
+# STEP TWO
+set alpha = 1
+y_alpha_left <- center_y + ((alpha-1)*left_spread_y)
+y_alpha_right <- center_y - ((alpha-1)*right_spread_y)
+x_alpha_left <- center_x + ((alpha-1)*left_spread_x)
+
+# alpha sets for dependent variable
+y_alpha_set <- cbind(y_alpha_left, y_alpha_right)
+
+# alpha sets for independent variables
+x_alpha_set <- cbind(x_alpha_left,x_alpha_right)
+
+dataset1 <- cbind(y_alpha_left,x_alpha_left)
+dataset2 <- cbind(y_alpha_right,x_alpha_right)
+data1 = as.data.frame(dataset1)
+data2 = as.data.frame(dataset2)
+
+require(ridge)
+fit1 <- linearRidge(y_alpha_left ~ x_alpha_left, data=data1, lambda="automatic", scaling=c("scale"))
+fit2 <- linearRidge(y_alpha_right ~ x_alpha_right, data=data2, lambda="automatic", scaling=c("scale"))
+
+
+# STEP THREE
+set alpha = max(runif(0,1))
+
+y_alpha_left[i] <- center_y[i] + ((alpha-1)*left_spread_y[i])
+y_alpha_right[i] <- center_y[i] - ((alpha-1)*right_spread_y[i])
+x_alpha_left[i,j] <- center_x[i,j] + ((alpha-1)*left_spread_x[i,j])
+
+# alpha sets for dependent variable
+y_alpha_set <- cbind(y_alpha_left[i], y_alpha_right[i])
+
+# alpha sets for independent variables
+x_alpha_set <- cbind(x_alpha_left[i,j],x_alpha_right[i,j])
+
+dataset3 <- cbind(y_alpha_left[i],x_alpha_left[i,j])
+dataset4 <- cbind(y_alpha_right[i],x_alpha_right[i,j])
+data3 = as.data.frame(dataset3)
+data4 = as.data.frame(dataset4)
+
+require(ridge)
+fit3 <- linearRidge(y_alpha_left[i] ~ x_alpha_left[i,j], data=data3, lambda="automatic", scaling=c("scale"))
+fit4 <- linearRidge(y_alpha_right[i] ~ x_alpha_right[i,j], data=data4, lambda="automatic", scaling=c("scale"))
+
+left_alpha* = min(fit3$coef, fit3$coef)
+right_alpha* = max(fit4$coef, fit4$coef)
+
+
+
+# STEP FOUR
+set alpha <- runif(0,1)
+y_alpha_left[i] <- center_y[i] + ((alpha-1)*left_spread_y[i])
+y_alpha_right[i] <- center_y[i] - ((alpha-1)*right_spread_y[i])
+x_alpha_left[i,j] <- center_x[i,j] + ((alpha-1)*left_spread_x[i,j])
+
+# alpha sets for dependent variable
+y_alpha_set <- cbind(y_alpha_left[i], y_alpha_right[i])
+
+# alpha sets for independent variables
+x_alpha_sset <- cbind(x_alpha_left[i,j],x_alpha_right[i,j])
+
+dataset5 <- cbind(y_alpha_left[i],x_alpha_left[i,j])
+dataset6 <- cbind(y_alpha_right[i],x_alpha_right[i,j])
+data5 = as.data.frame(dataset5)
+data6 = as.data.frame(dataset6)
+
+require(ridge)
+fit5 <- linearRidge(y_alpha_left[i] ~ x_alpha_left[i,j], data=data5, lambda="automatic", scaling=c("scale"))
+fit6 <- linearRidge(y_alpha_right[i] ~ x_alpha_right[i,j], data=data6, lambda="automatic", scaling=c("scale"))
+
+twostar = min(fit5$coef, fit1$coef)
+threestar = max(left_alpha*, twostar)
+fourstar = min(fit5$coef, left_alpha*)
+
+IF alpha_j <= alpha* THEN left_alpha_j = threestar 
+                           ELSE left_alpha_j = fourstar
+hashtwo = max(fit6$coef, fit2$coef)
+hashthree = min(right_alpha*, hashtwo)
+hashfour = max(fit6$coef, right_alpha*)
+
+IF alpha_j <= alpha* THEN right_alpha_j = hashthree
+                        ELSE right_alpha_j = hashfour
+
+
+# STEP FIVE
+set alpha = 0
+y_alpha_left[i] <- center_y[i] + ((alpha-1)*left_spread_y[i])
+y_alpha_right[i] <- center_y[i] - ((alpha-1)*right_spread_y[i])
+x_alpha_left[i,j] <- center_x[i,j] + ((alpha-1)*left_spread_x[i,j])
+
+# alpha sets for dependent variable
+y_alpha_set <- cbind(y_alpha_left[i], y_alpha_right[i])
+
+# alpha sets for independent variables
+x_alpha_sset <- cbind(x_alpha_left[i,j],x_alpha_right[i,j])
+
+dataset7 <- cbind(y_alpha_left[i],x_alpha_left[i,j])
+dataset8 <- cbind(y_alpha_right[i],x_alpha_right[i,j])
+data7 = as.data.frame(dataset7)
+data8 = as.data.frame(dataset8)
+
+require(ridge)
+fit7 <- linearRidge(y_alpha_left[i] ~ x_alpha_left[i,j], data=data7, lambda="automatic", scaling=c("scale"))
+fit8 <- linearRidge(y_alpha_right[i] ~ x_alpha_right[i,j], data=data8, lambda="automatic", scaling=c("scale"))
